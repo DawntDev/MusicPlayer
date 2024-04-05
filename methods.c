@@ -21,7 +21,6 @@ void play_song(char *path)
         CloseHandle(pi.hThread);
     };
 
-
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     ZeroMemory(&pi, sizeof(pi));
@@ -30,7 +29,7 @@ void play_song(char *path)
     {
         fprintf(stderr, "Error al ejecutar el comando: %d\n", GetLastError());
     }
-    
+
     // free(cmd);
 };
 
@@ -50,14 +49,29 @@ void terminate()
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#define PROCCESS "ffplay -nodisp -hide_banner -loglevel error "
 
-int play_song(char *path)
+pid_t child_pid;
+
+void play_song(char *path)
 {
-    char *command = (char *)malloc(sizeof("./bin/ffplay.exe -nodisp ") + sizeof(path) + sizeof(char));
-    strcpy(command, ".\\bin\\ffplay.exe -nodisp ");
-    strcat(command, path);
+    if (child_pid > 0)
+    {
+        kill(child_pid, SIGTERM);
+    };
 
-    return execl("./", command, NULL);
+    child_pid = fork();
+    if (child_pid == 0)
+    {
+        execl("/usr/bin/ffplay", "ffplay", "-nodisp", "-hide_banner", "-loglevel", "error", path, NULL);
+        perror("Error al ejecutar el comando");
+        _exit(0);
+    };
+};
+
+void terminate()
+{
+    kill(child_pid, SIGTERM);
 };
 #endif
 
