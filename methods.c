@@ -1,14 +1,14 @@
 #ifdef _WIN32
 #include <windows.h>
-#define process "./bin/ffplay.exe -nodisp -hide_banner -loglevel error "
+#define PROCCESS "./bin/ffplay.exe -nodisp -hide_banner -loglevel error "
 
 STARTUPINFO si;
 PROCESS_INFORMATION pi;
 
 void play_song(char *path)
 {
-    char *cmd = (char *)malloc(sizeof(process) + sizeof(path) + 3);
-    strcpy(cmd, process);
+    char *cmd = (char *)malloc(sizeof(PROCCESS) + sizeof(path) + 3);
+    strcpy(cmd, PROCCESS);
     strcat(cmd, "\"");
     strcat(cmd, path); // Asegúrate de que path tenga comillas alrededor
     strcat(cmd, "\"");
@@ -46,7 +46,7 @@ void terminate()
 
 #endif
 
-#ifdef linux
+#ifdef __linux__
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>

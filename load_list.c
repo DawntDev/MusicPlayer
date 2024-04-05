@@ -3,13 +3,19 @@
 #include <dirent.h>
 #include <regex.h>
 
+#if defined(_WIN32)
+#  define DIR_SEPARATOR "\\"
+#else
+#  define DIR_SEPARATOR "/"
+#endif
+
 char *join_path(char *destination, char *file)
 {
     int len = strlen(destination) + strlen(file) + 2;
     char *buffer = (char *)malloc(len * sizeof(char));
 
     strcpy(buffer, destination);
-    strcat(buffer, "\\");
+    strcat(buffer, DIR_SEPARATOR);
     strcat(buffer, file);
 
     return buffer;

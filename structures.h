@@ -1,4 +1,3 @@
-
 typedef struct Node
 {
     char *name;
